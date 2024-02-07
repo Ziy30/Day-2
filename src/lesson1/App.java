@@ -1,5 +1,5 @@
-import lesson1.StringHandler;
-import lesson2.IntegerHandler;
+package lesson1;
+import lesson1.IntegerHandler;
 
 public class App {
     public static void main(String[] args) throws Exception {
