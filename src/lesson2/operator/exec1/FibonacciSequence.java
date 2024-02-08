@@ -4,8 +4,8 @@ import java.util.Scanner;
 
 public class FibonacciSequence {
     public static void main(String[] args) {
-        int n ;
-        Scanner Obj = new Scanner(System.in);  // Create a Scanner object
+        int n;
+        Scanner Obj = new Scanner(System.in); // Create a Scanner object
         System.out.println("Enter start of fibinacci sequence:");
         n = Obj.nextInt();
         generateFibonacci(n);
