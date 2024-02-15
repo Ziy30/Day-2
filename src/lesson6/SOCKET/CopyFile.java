@@ -8,6 +8,10 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class CopyFile {
+    public CopyFile(String inputFileName, String outputFileName) {
+        //TODO Auto-generated constructor stub
+    }
+
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
 
@@ -36,5 +40,10 @@ public class CopyFile {
             e.printStackTrace();
         }
 
+    }
+
+    public void copyFile() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'copyFile'");
     }
 }
