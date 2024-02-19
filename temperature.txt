@@ -1,1 +1,1 @@
-<html>Celsius: 12323.0<br>Fahrenheit: 22213.4<br>Kelvin: 12596.15<br>Rankine: 22673.07<br>Réaumur: 9858.4</html>
+<html>Celsius: 12.0<br>Fahrenheit: 53.6<br>Kelvin: 285.15<br>Rankine: 513.27<br>Réaumur: 9.6</html>

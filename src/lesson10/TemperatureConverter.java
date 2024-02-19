@@ -5,14 +5,20 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 
-
-public abstract class TemperatureConverter extends JFrame implements ActionListener{
+public abstract class TemperatureConverter extends JFrame implements ActionListener {
     protected JTextField inputField;
     private JLabel inputLabel, outputLabel, radioButtonLabel;
     public JLabel resultLabel;
     protected JRadioButton celsiusButton;
     protected JRadioButton fahrenheitButton;
-    private JButton convertButton, saveButton;
+    private JButton convertButton, saveButton; // Add saveButton
+
+    // Define class-level fields for temperature conversions
+    private double celsiusTemp;
+    private double fahrenheitTemp;
+    private double kelvinTemp;
+    private double rankineTemp;
+    private double reaumurTemp;
 
     public TemperatureConverter() {
         setTitle("Temperature Converter");
@@ -52,52 +58,117 @@ public abstract class TemperatureConverter extends JFrame implements ActionListe
 
         // Convert and save buttons
         convertButton = new JButton("Convert");
-        saveButton = new JButton("Save");
+        saveButton = new JButton("Save to file ");
+
         convertButton.setPreferredSize(new Dimension(80, 30));
         saveButton.setPreferredSize(new Dimension(80, 30));
         addComponent(panel, convertButton, gbc, 0, 3, 1, 1);
-        addComponent(panel, saveButton, gbc, 1, 3, 1, 1);
+        addComponent(panel, saveButton, gbc, 1, 3, 1, 1); // Add the saveButton
 
         // Add action listeners
         convertButton.addActionListener(this);
-        saveButton.addActionListener(this);
+        saveButton.addActionListener(this); // Add action listener for saveButton
 
         add(panel);
         setLocationRelativeTo(null); // Center the window
         setVisible(true);
     }
 
-    private void addComponent(Container container, Component component, GridBagConstraints gbc, int gridx, int gridy, int gridwidth, int gridheight) {
+    private void addComponent(Container container, Component component, GridBagConstraints gbc, int gridx, int gridy,
+            int gridwidth, int gridheight) {
         gbc.gridx = gridx;
         gbc.gridy = gridy;
         gbc.gridwidth = gridwidth;
         gbc.gridheight = gridheight;
         container.add(component, gbc);
     }
-    protected void saveToFile() {
+
+    // Override this method in subclasses
+    public void convertTemperature() {
         try {
-            FileWriter writer = new FileWriter("temperature.txt");
-            writer.write(resultLabel.getText());
-            writer.close();
-            JOptionPane.showMessageDialog(this, "Data saved to temperature.txt");
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error saving data to file");
+            double inputTemp = Double.parseDouble(inputField.getText());
+            double celsiusTemp = 0, fahrenheitTemp = 0;
+
+            if (celsiusButton.isSelected()) {
+                celsiusTemp = inputTemp;
+                fahrenheitTemp = (celsiusTemp * 9 / 5) + 32;
+            } else if (fahrenheitButton.isSelected()) {
+                fahrenheitTemp = inputTemp;
+                celsiusTemp = (fahrenheitTemp - 32) * 5 / 9;
+            }
+
+            double kelvinTemp = celsiusTemp + 273.15;
+            double rankineTemp = (celsiusTemp + 273.15) * 9 / 5;
+            double reaumurTemp = celsiusTemp * 4 / 5;
+
+            resultLabel.setText("<html>Celsius: " + celsiusTemp + "<br>Fahrenheit: " + fahrenheitTemp +
+                    "<br>Kelvin: " + kelvinTemp + "<br>Rankine: " + rankineTemp + "<br>Réaumur: " + reaumurTemp
+                    + "</html>");
+
+        } catch (NumberFormatException ex) {
+            resultLabel.setText("Invalid input");
         }
     }
-     public void actionPerformed(ActionEvent e) {
-       
+
+    // save to txt file
+    /*
+     * public void saveToFile() {
+     * try {
+     * FileWriter writer = new FileWriter("temperature.txt");
+     * writer.write(resultLabel.getText());
+     * writer.close();
+     * JOptionPane.showMessageDialog(this, "Data saved to temperature.txt");
+     * } catch (IOException e) {
+     * JOptionPane.showMessageDialog(this, "Error saving data to file");
+     * }
+     * }
+     */
+
+    public void saveToDB() {
+        try {
+            double inputTemp = Double.parseDouble(inputField.getText()); // Parse input temperature to double
+
+            // Determine the selected temperature scale (Celsius or Fahrenheit)
+            String scale;
+            if (celsiusButton.isSelected()) {
+                scale = "Celsius";
+            } else if (fahrenheitButton.isSelected()) {
+                scale = "Fahrenheit";
+            } else {
+                JOptionPane.showMessageDialog(null, "Please select a temperature scale.",
+                        "Warning", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Create Temperature object
+            Temp temperature = new Temp(0,inputTemp, scale, celsiusTemp, fahrenheitTemp, kelvinTemp, rankineTemp, reaumurTemp);
+
+            // Insert temperature data into the database using TemperatureService
+            TempConvService temperatureService = new TempConvService();
+            temperatureService.saveTemperature(temperature);
+
+            // Show success message
+            JOptionPane.showMessageDialog(null, "Temperature data added to the database.",
+                    "Success", JOptionPane.INFORMATION_MESSAGE);
+                    
+        } catch (NumberFormatException ex) {
+            // Show error message if input temperature is not a valid number
+            JOptionPane.showMessageDialog(null, "Invalid input temperature.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+
+    public void actionPerformed(ActionEvent e) {
         if (e.getSource() == convertButton) {
             if (!celsiusButton.isSelected() && !fahrenheitButton.isSelected()) {
-                JOptionPane.showMessageDialog(this, "Please select Celsius or Fahrenheit.", "Warning", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Please select Celsius or Fahrenheit.", "Warning",
+                        JOptionPane.WARNING_MESSAGE);
                 return;
             }
             convertTemperature();
         } else if (e.getSource() == saveButton) {
-            saveToFile();
+            saveToDB();
         }
     }
-
-    protected abstract void convertTemperature();
-
-   
 }
