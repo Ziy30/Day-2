@@ -82,8 +82,14 @@ public class Temp {
         return reumur;
     }
 
+    public void get(){
+
+    }
+
     public void setReumur(double reumur) {
         this.reumur = reumur;
+
+       
     }
 
     

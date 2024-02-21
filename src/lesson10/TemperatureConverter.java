@@ -14,11 +14,11 @@ public abstract class TemperatureConverter extends JFrame implements ActionListe
     private JButton convertButton, saveButton; // Add saveButton
 
     // Define class-level fields for temperature conversions
-    private double celsiusTemp;
-    private double fahrenheitTemp;
-    private double kelvinTemp;
-    private double rankineTemp;
-    private double reaumurTemp;
+    public double celsiusTemp;
+    public double fahrenheitTemp;
+    public double kelvinTemp;
+    public double rankineTemp;
+    public double reaumurTemp;
 
     public TemperatureConverter() {
         setTitle("Temperature Converter");
@@ -58,7 +58,7 @@ public abstract class TemperatureConverter extends JFrame implements ActionListe
 
         // Convert and save buttons
         convertButton = new JButton("Convert");
-        saveButton = new JButton("Save to file ");
+        saveButton = new JButton("Save to Database ");
 
         convertButton.setPreferredSize(new Dimension(80, 30));
         saveButton.setPreferredSize(new Dimension(80, 30));
@@ -124,6 +124,19 @@ public abstract class TemperatureConverter extends JFrame implements ActionListe
      * }
      */
 
+     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == convertButton) {
+            if (!celsiusButton.isSelected() && !fahrenheitButton.isSelected()) {
+                JOptionPane.showMessageDialog(this, "Please select Celsius or Fahrenheit.", "Warning",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            convertTemperature();
+        } else if (e.getSource() == saveButton) {
+            saveToDB();
+        }
+    }
+
     public void saveToDB() {
         try {
             double inputTemp = Double.parseDouble(inputField.getText()); // Parse input temperature to double
@@ -141,7 +154,8 @@ public abstract class TemperatureConverter extends JFrame implements ActionListe
             }
 
             // Create Temperature object
-            Temp temperature = new Temp(0,inputTemp, scale, celsiusTemp, fahrenheitTemp, kelvinTemp, rankineTemp, reaumurTemp);
+            Temp temperature = new Temp(0, inputTemp, scale, celsiusTemp, fahrenheitTemp, kelvinTemp, rankineTemp,
+                    reaumurTemp);
 
             // Insert temperature data into the database using TemperatureService
             TempConvService temperatureService = new TempConvService();
@@ -150,7 +164,7 @@ public abstract class TemperatureConverter extends JFrame implements ActionListe
             // Show success message
             JOptionPane.showMessageDialog(null, "Temperature data added to the database.",
                     "Success", JOptionPane.INFORMATION_MESSAGE);
-                    
+
         } catch (NumberFormatException ex) {
             // Show error message if input temperature is not a valid number
             JOptionPane.showMessageDialog(null, "Invalid input temperature.",
@@ -158,17 +172,5 @@ public abstract class TemperatureConverter extends JFrame implements ActionListe
         }
     }
 
-
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == convertButton) {
-            if (!celsiusButton.isSelected() && !fahrenheitButton.isSelected()) {
-                JOptionPane.showMessageDialog(this, "Please select Celsius or Fahrenheit.", "Warning",
-                        JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-            convertTemperature();
-        } else if (e.getSource() == saveButton) {
-            saveToDB();
-        }
-    }
+   
 }
