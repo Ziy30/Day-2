@@ -1,5 +1,9 @@
 package EXAM.Q1;
 
+/*1. Consider below code of Test.java file,
+ What will be the result of compiling and 
+ executing Test class */
+ 
 public class Q1 {
     public static void main(String[] args) {
         int ctr = 100;

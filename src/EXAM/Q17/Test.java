@@ -1,14 +1,16 @@
 package EXAM.Q17;
 
+import java.io.EOFException;
+
 public class Test {
     private static void test() throws Exception {
         throw new Exception();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args)  {
         try {
             test();
-        } finally {
+        } finally{
             System.out.println("GAME ON");
         }
     }

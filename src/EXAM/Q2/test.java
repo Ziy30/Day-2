@@ -1,5 +1,9 @@
 package EXAM.Q2;
 
+/* 
+2. Given code of Test.java file,
+ What will be the result of compiling and executing above code? */
+
 class Base {
     String msg = "INHALE";
 }

@@ -3,7 +3,7 @@ package EXAM.Q6;
 public class Test {
     public static void main(String[] args) {
         boolean status = true;
-        System.out.println(status = false || status = true | status = false);
+        System.out.println(status || status );
         System.out.println(status);}
 }
 
